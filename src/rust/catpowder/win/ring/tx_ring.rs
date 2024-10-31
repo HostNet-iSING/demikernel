@@ -14,6 +14,7 @@ use crate::{
     runtime::{fail::Fail, libxdp, limits},
 };
 use ::std::{cell::RefCell, rc::Rc};
+use std::num::{NonZeroU16, NonZeroU32};
 
 //======================================================================================================================
 // Structures
@@ -33,14 +34,17 @@ pub struct TxRing {
 
 impl TxRing {
     /// Creates a new ring for transmitting packets.
-    pub fn new(api: &mut XdpApi, length: u32, ifindex: u32, queueid: u32) -> Result<Self, Fail> {
+    pub fn new(api: &mut XdpApi, length: u32, buf_count: u32, ifindex: u32, queueid: u32) -> Result<Self, Fail> {
         // Create an XDP socket.
         trace!("creating xdp socket");
         let mut socket: XdpSocket = XdpSocket::create(api)?;
 
         // Create a UMEM region.
         trace!("creating umem region");
-        let mem: Rc<RefCell<UmemReg>> = Rc::new(RefCell::new(UmemReg::new(1, limits::RECVBUF_SIZE_MAX as u32)));
+        let buf_count: NonZeroU32 = NonZeroU32::try_from(buf_count).map_err(Fail::from)?;
+        let chunk_size: NonZeroU16 =
+            NonZeroU16::try_from(u16::try_from(limits::RECVBUF_SIZE_MAX).map_err(Fail::from)?).map_err(Fail::from)?;
+        let mem: Rc<RefCell<UmemReg>> = Rc::new(RefCell::new(UmemReg::new(buf_count, chunk_size)?));
 
         // Register the UMEM region.
         trace!("registering umem region");

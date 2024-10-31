@@ -491,6 +491,12 @@ impl DemiBuffer {
     // Public Functions
     // ----------------
 
+    /// Returns the number of bytes required to hold the metadata, which is generally prepended to the data buffer.
+    /// The amount of memory required to hold a DemiBuffer is general metadata_size() + capacity.
+    pub fn metadata_size() -> usize {
+        size_of::<MetaData>()
+    }
+
     /// Returns `true` if this `DemiBuffer` was allocated off of the heap, and `false` otherwise.
     pub fn is_heap_allocated(&self) -> bool {
         self.get_tag() == Tag::Heap
@@ -506,6 +512,11 @@ impl DemiBuffer {
     // Note that while we return a usize here (for convenience), the value is guaranteed to never exceed u16::MAX.
     pub fn len(&self) -> usize {
         self.as_metadata().data_len as usize
+    }
+
+    /// Returns the amount of headroom available in the packet.
+    pub fn headroom(&self) -> u16 {
+        self.as_metadata().data_off
     }
 
     /// Removes `nbytes` bytes from the beginning of the `DemiBuffer` chain.

@@ -18,7 +18,11 @@ use crate::{
     },
     runtime::{fail::Fail, libxdp, limits},
 };
-use ::std::{cell::RefCell, rc::Rc};
+use std::{
+    cell::RefCell,
+    num::{NonZeroU16, NonZeroU32},
+    rc::Rc,
+};
 
 //======================================================================================================================
 // Structures
@@ -44,14 +48,17 @@ pub struct RxRing {
 
 impl RxRing {
     /// Creates a new ring for receiving packets.
-    pub fn new(api: &mut XdpApi, length: u32, ifindex: u32, queueid: u32) -> Result<Self, Fail> {
+    pub fn new(api: &mut XdpApi, length: u32, buf_count: u32, ifindex: u32, queueid: u32) -> Result<Self, Fail> {
         // Create an XDP socket.
         trace!("creating xdp socket");
         let mut socket: XdpSocket = XdpSocket::create(api)?;
 
         // Create a UMEM region.
         trace!("creating umem region");
-        let mem: Rc<RefCell<UmemReg>> = Rc::new(RefCell::new(UmemReg::new(length, limits::RECVBUF_SIZE_MAX as u32)));
+        let buf_count: NonZeroU32 = NonZeroU32::try_from(buf_count).map_err(Fail::from)?;
+        let chunk_size: NonZeroU16 =
+            NonZeroU16::try_from(u16::try_from(limits::RECVBUF_SIZE_MAX).map_err(Fail::from)?).map_err(Fail::from)?;
+        let mem: Rc<RefCell<UmemReg>> = Rc::new(RefCell::new(UmemReg::new(buf_count, chunk_size)?));
 
         // Register the UMEM region.
         trace!("registering umem region");
@@ -108,7 +115,10 @@ impl RxRing {
         let mut ring_index: u32 = 0;
         rx_fill_ring.producer_reserve(length, &mut ring_index);
         let b: *mut u64 = rx_fill_ring.get_element(ring_index) as *mut u64;
-        unsafe { *b = 0 };
+        //FIXME
+        {
+            *b = 0
+        };
         rx_fill_ring.producer_submit(length);
 
         // Create XDP program.

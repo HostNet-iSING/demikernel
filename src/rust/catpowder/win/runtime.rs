@@ -64,13 +64,22 @@ impl SharedCatpowderRuntime {
         trace!("Creating XDP runtime.");
         let mut api: XdpApi = XdpApi::new()?;
 
+        let (tx_buffer_count, tx_ring_size) = config.tx_buffer_config()?;
+
         // Open TX and RX rings
-        let tx: TxRing = TxRing::new(&mut api, Self::RING_LENGTH, ifindex, 0)?;
+        let tx: TxRing = TxRing::new(&mut api, tx_ring_size, tx_buffer_count, ifindex, 0)?;
 
         let queue_count: u32 = deduce_rss_settings(&mut api, ifindex)?;
         let mut rx_rings: Vec<RxRing> = Vec::with_capacity(queue_count as usize);
+        let (rx_buffer_count, rx_ring_size) = config.rx_buffer_config()?;
         for queueid in 0..queue_count {
-            rx_rings.push(RxRing::new(&mut api, Self::RING_LENGTH, ifindex, queueid as u32)?);
+            rx_rings.push(RxRing::new(
+                &mut api,
+                rx_ring_size,
+                rx_buffer_count,
+                ifindex,
+                queueid as u32,
+            )?);
         }
         trace!("Created {} RX rings.", rx_rings.len());
 
@@ -220,12 +229,13 @@ fn count_processor_cores() -> Result<usize, Fail> {
 /// Deduces the RSS settings for the given interface. Returns the number of valid RSS queues for the interface.
 fn deduce_rss_settings(api: &mut XdpApi, ifindex: u32) -> Result<u32, Fail> {
     const DUMMY_QUEUE_LENGTH: u32 = 1;
+    const DUMMY_BUFFER_COUNT: u32 = 1;
     let sys_proc_count: u32 = count_processor_cores()? as u32;
 
     // NB there will always be at least one queue available, hence starting the loop at 1. There should not be more
     // queues than the number of processors on the system.
     for queueid in 1..sys_proc_count {
-        match TxRing::new(api, DUMMY_QUEUE_LENGTH, ifindex, queueid) {
+        match TxRing::new(api, DUMMY_QUEUE_LENGTH, DUMMY_BUFFER_COUNT, ifindex, queueid) {
             Ok(_) => (),
             Err(e) => {
                 warn!(
