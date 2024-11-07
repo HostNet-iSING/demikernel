@@ -305,7 +305,10 @@ impl Config {
         if let Some(addr) = Self::get_typed_env_option(raw_socket_config::LOCAL_VF_INTERFACE_INDEX)? {
             Ok(addr)
         } else {
-            Self::get_int_option(self.get_raw_socket_config()?, raw_socket_config::LOCAL_VF_INTERFACE_INDEX)
+            Self::get_int_option(
+                self.get_raw_socket_config()?,
+                raw_socket_config::LOCAL_VF_INTERFACE_INDEX,
+            )
         }
     }
 

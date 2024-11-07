@@ -44,7 +44,7 @@ struct CatpowderRuntimeInner {
     api: XdpApi,
     tx: TxRing,
     rx_rings: Vec<RxRing>,
-    vf_rx_rings : Vec<RxRing>,
+    vf_rx_rings: Vec<RxRing>,
 }
 //======================================================================================================================
 // Implementations
@@ -77,13 +77,18 @@ impl SharedCatpowderRuntime {
         trace!("Created {} RX rings on interface {}", rx_rings.len(), ifindex);
 
         let vf_queue_count = deduce_rss_settings(&mut api, vf_if_index)?;
-        let mut vf_rx_rings= Vec::with_capacity(vf_queue_count as usize);
+        let mut vf_rx_rings = Vec::with_capacity(vf_queue_count as usize);
         for queueid in 0..vf_queue_count {
             vf_rx_rings.push(RxRing::new(&mut api, Self::RING_LENGTH, vf_if_index, queueid as u32)?);
         }
         trace!("Created {} RX rings on interface {}.", vf_rx_rings.len(), vf_if_index);
 
-        Ok(Self(SharedObject::new(CatpowderRuntimeInner { api, tx, rx_rings, vf_rx_rings })))
+        Ok(Self(SharedObject::new(CatpowderRuntimeInner {
+            api,
+            tx,
+            rx_rings,
+            vf_rx_rings,
+        })))
     }
 }
 
