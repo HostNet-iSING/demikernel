@@ -61,7 +61,7 @@ mod raw_socket_config {
     #[cfg(target_os = "linux")]
     pub const LOCAL_INTERFACE_NAME: &str = "linux_interface_name";
 
-    // the primary interface index. this should be the virtualized interface for VMs.
+    // The primary interface index. This should be the virtualized interface for VMs.
     #[cfg(target_os = "windows")]
     pub const LOCAL_INTERFACE_INDEX: &str = "xdp_interface_index";
 
@@ -301,7 +301,6 @@ impl Config {
 
     #[cfg(all(feature = "catpowder-libos", target_os = "windows"))]
     pub fn local_vf_interface_index(&self) -> Result<u32, Fail> {
-        // Parse local MAC address.
         if let Some(addr) = Self::get_typed_env_option(raw_socket_config::LOCAL_VF_INTERFACE_INDEX)? {
             Ok(addr)
         } else {
