@@ -2,13 +2,13 @@
 # Licensed under the MIT license.
 
 demikernel:
-  local_ipv4_addr: 10.2.14.1
-  local_link_addr: "b8:ce:f6:7f:28:28"
+  local_ipv4_addr: 10.0.2.101
+  local_link_addr: "10:70:fd:6b:93:5c"
 raw_socket:
-  linux_interface_name: "rdma2"
+  linux_interface_name: "rdma0"
   xdp_interface_index: 0
 dpdk:
-  eal_init: ["", "-c", "0xff", "-n", "4", "-a", "86:00.0","--proc-type=auto"]
+  eal_init: ["", "-c", "0xff", "-n", "4", "-a", "98:00.0","--proc-type=auto"]
 tcp_socket_options:
   keepalive:
     enabled: false
@@ -25,8 +25,8 @@ inetstack_config:
   udp_checksum_offload: false
   tcp_checksum_offload: false
   arp_table:
-    "1c:34:da:f3:99:c8": "10.2.14.254"
-    "1c:34:da:f3:99:c8": "10.0.14.254"
+    "10:70:fd:87:0e:ba": "10.0.2.102"
+    "90:2e:16:0d:58:52": "192.168.40.167"
   arp_request_retries: 5
   arp_request_timeout: 20
   arp_cache_ttl: 15

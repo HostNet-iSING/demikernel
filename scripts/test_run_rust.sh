@@ -1,11 +1,12 @@
 # Set location for Demikernel's config file.
-export CONFIG_PATH=/home/hxy/git_repos/demikernel/scripts/config/config.yaml
+export CONFIG_PATH=/home/ubuntu/git_repos/demikernel/scripts/config/config.yaml
+export LD_LIBRARY_PATH=/home/ubuntu/git_repos/PipeTune/third_party/dpdk-stable-22.11.3/build/install/lib/x86_64-linux-gnu
 
 # Set parameters for Demikernel's TCP/UDP stack.
 export MSS=1500
 export MTU=1500
-export SERVER_IPV4_ADDR=192.168.1.246:56789
-export CLIENT_IPV4_ADDR=192.168.1.243:56789
+export SERVER_IPV4_ADDR=10.0.2.102:56789
+export CLIENT_IPV4_ADDR=10.0.2.101:56789
 
 # Run system-level tests with Catnap LibOS, unless otherwise stated.
 # If you want to system-level tests on a different LibOS, then set the LIBOS flag accordingly.
