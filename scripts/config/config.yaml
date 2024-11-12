@@ -1,0 +1,28 @@
+# Copyright (c) Microsoft Corporation.
+# Licensed under the MIT license.
+
+client:
+  connect_to:
+    host: 10.2.14.1
+    port: 20081
+  client:
+    host: 10.2.13.1
+    port: 20081
+server:
+  bind:
+    host: 10.2.14.1
+    port: 20081
+  client:
+    host: 10.2.13.1
+    port: 20081
+catnip:
+  my_ipv4_addr: 10.2.13.1
+  my_link_addr: "b8:ce:f6:7f:23:c0"
+  my_interface_name: "rdma2"
+  arp_table:
+    "1c:34:da:f3:99:c8": "10.2.13.254"
+    "1c:34:da:f3:99:c8": "10.0.13.254"
+dpdk:
+  eal_init: ["", "-c", "0xff", "-n", "4", "-a", "86:00.0","--proc-type=auto"]
+
+# vim: set tabstop=2 shiftwidth=2
