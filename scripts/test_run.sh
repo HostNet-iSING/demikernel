@@ -11,20 +11,21 @@ export CLIENT_IPV4_ADDR=192.168.1.243:56789
 # If you want to system-level tests on a different LibOS, then set the LIBOS flag accordingly.
 export LIBOS=catnip
 
-CUR_DIR=$PWD/..
+SHELL_DIR=$(dirname "$0")
+PROJ_DIR=$SHELL_DIR/..
 
 # Run tcp-push-pop.
-# $CUR_DIR/bin/examples/rust/tcp-push-pop.elf --server $SERVER_IPV4_ADDR # Run this on server host.
-# $CUR_DIR/bin/examples/rust/tcp-push-pop.elf --client $SERVER_IPV4_ADDR # Run this on client host.
+# $PROJ_DIR/bin/examples/rust/tcp-push-pop.elf --server $SERVER_IPV4_ADDR # Run this on server host.
+# $PROJ_DIR/bin/examples/rust/tcp-push-pop.elf --client $SERVER_IPV4_ADDR # Run this on client host.
 
 # Run tcp-ping-pong.
-# $CUR_DIR/bin/examples/rust/tcp-ping-pong.elf --server $SERVER_IPV4_ADDR # Run this on server host.
-# $CUR_DIR/bin/examples/rust/tcp-ping-pong.elf --client $SERVER_IPV4_ADDR # Run this on client host.
+# $PROJ_DIR/bin/examples/rust/tcp-ping-pong.elf --server $SERVER_IPV4_ADDR # Run this on server host.
+# $PROJ_DIR/bin/examples/rust/tcp-ping-pong.elf --client $SERVER_IPV4_ADDR # Run this on client host.
 
 # Run udp-push-pop.
-# $CUR_DIR/bin/examples/rust/udp-push-pop.elf --server $SERVER_IPV4_ADDR $CLIENT_IPV4_ADDR # Run this on server host.
-# $CUR_DIR/bin/examples/rust/udp-push-pop.elf --client $CLIENT_IPV4_ADDR $SERVER_IPV4_ADDR # Run this on client host.
+# $PROJ_DIR/bin/examples/rust/udp-push-pop.elf --server $SERVER_IPV4_ADDR $CLIENT_IPV4_ADDR # Run this on server host.
+# $PROJ_DIR/bin/examples/rust/udp-push-pop.elf --client $CLIENT_IPV4_ADDR $SERVER_IPV4_ADDR # Run this on client host.
 
 # Run udp-ping-pong.
-# $CUR_DIR/bin/examples/rust/udp-ping-pong.elf --server $SERVER_IPV4_ADDR $CLIENT_IPV4_ADDR # Run this on server host.
-$CUR_DIR/bin/examples/rust/udp-ping-pong.elf --client $CLIENT_IPV4_ADDR $SERVER_IPV4_ADDR # Run this on client host.
+# $PROJ_DIR/bin/examples/rust/udp-ping-pong.elf --server $SERVER_IPV4_ADDR $CLIENT_IPV4_ADDR # Run this on server host.
+$PROJ_DIR/bin/examples/rust/udp-ping-pong.elf --client $CLIENT_IPV4_ADDR $SERVER_IPV4_ADDR # Run this on client host.
