@@ -1,8 +1,8 @@
 # Set parameters for remote machines.
 export SERVER_HOSTNAME=Desktop_02
-export SERVER_IPV4_ADDR=192.168.40.171
+export SERVER_IPV4_ADDR=10.0.2.102
 export CLIENT_HOSTNAME=Desktop_01
-export CLIENT_IPV4_ADDR=192.168.40.167
+export CLIENT_IPV4_ADDR=10.0.2.101
 export DEMIKERNEL_PATH='/home/ubuntu/git_repos/demikernel'
 export DEMIKERNEL_BRANCH=dev
 
