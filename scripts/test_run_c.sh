@@ -13,7 +13,7 @@ export CLIENT_PORT=56789
 
 # Run system-level tests with Catnap LibOS, unless otherwise stated.
 # If you want to system-level tests on a different LibOS, then set the LIBOS flag accordingly.
-export LIBOS=catnip
+export LIBOS=catnap
 
 SHELL_DIR=$(dirname "$0")
 PROJ_DIR=$SHELL_DIR/..
@@ -34,5 +34,5 @@ PROJ_DIR=$SHELL_DIR/..
 # $PROJ_DIR/bin/examples/rust/udp-ping-pong.elf --server $SERVER_IPV4_ADDR $CLIENT_IPV4_ADDR # Run this on server host.
 # $PROJ_DIR/bin/examples/rust/udp-ping-pong.elf --client $CLIENT_IPV4_ADDR $SERVER_IPV4_ADDR # Run this on client host.
 
-# $PROJ_DIR/bin/examples/c/udp-ping-pong.elf --server $SERVER_IPV4_ADDR $SERVER_PORT $CLIENT_IPV4_ADDR $CLIENT_PORT # Run this on server host.
-$PROJ_DIR/bin/examples/c/udp-ping-pong.elf --client $CLIENT_IPV4_ADDR $CLIENT_PORT $SERVER_IPV4_ADDR $SERVER_PORT # Run this on client host.
+# $PROJ_DIR/bin/examples/c/udp-ping-pong.elf --server $SERVER_IPV4_ADDR $SERVER_PORT $CLIENT_IPV4_ADDR $CLIENT_PORT 128 1000000 # Run this on server host.
+$PROJ_DIR/bin/examples/c/udp-ping-pong.elf --client $CLIENT_IPV4_ADDR $CLIENT_PORT $SERVER_IPV4_ADDR $SERVER_PORT 128 1000000 16 # Run this on client host.

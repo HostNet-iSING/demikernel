@@ -12,7 +12,7 @@ MAKE_FLAGS=$3
 MAKE_TARGET=$4
 
 # SSH Options
-SSH_OPTIONS=""
+SSH_OPTIONS="-p 30041"
 
 # RSYNC Options
 RSYNC_OPTIONS="-avz --delete-after"

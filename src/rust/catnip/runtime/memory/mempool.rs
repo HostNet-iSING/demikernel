@@ -42,7 +42,6 @@ impl MemoryPool {
                 rte_socket_id() as i32,
             )
         };
-
         // Failed to create memory pool.
         if pool.is_null() {
             let rte_errno: libc::c_int = unsafe { rte_errno() };
