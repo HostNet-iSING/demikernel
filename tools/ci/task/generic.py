@@ -13,5 +13,5 @@ class BaseTask:
     def execute(self) -> subprocess.Popen[str]:
         # return subprocess.Popen(self.cmd, shell=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         ret = subprocess.Popen(self.cmd, shell=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        print(f"Executing command: {self.cmd}")
+        # print(f"Executing command: {self.cmd}")
         return ret
