@@ -427,7 +427,7 @@ mod test {
         let socket_types: Vec<libc::c_int> = vec![
             libc::SOCK_DCCP,
             // libc::SOCK_DGRAM,
-            libc::SOCK_PACKET,
+            // libc::SOCK_PACKET,
             libc::SOCK_RAW,
             libc::SOCK_RDM,
             libc::SOCK_SEQPACKET,

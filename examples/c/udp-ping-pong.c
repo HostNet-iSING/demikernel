@@ -36,7 +36,7 @@
 /**
  * @brief Data size.
  */
-#define DATA_SIZE 64
+#define DATA_SIZE 512
 
 /**
  * @brief Maximum number of iterations.
