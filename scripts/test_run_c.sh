@@ -6,21 +6,23 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/ubuntu/git_repos/demikernel/target
 # Set parameters for Demikernel's TCP/UDP stack.
 export MSS=1500
 export MTU=1500
-export SERVER_IPV4_ADDR=10.0.2.102
-export SERVER_PORT=56789
-export CLIENT_IPV4_ADDR=10.0.2.101
-export CLIENT_PORT=56789
+export SERVER_IPV4_ADDR="10.0.2.102"
+export SERVER_PORT=30086
+export CLIENT_IPV4_ADDR="10.0.2.101"
+export CLIENT_PORT=30086
 
 # Run system-level tests with Catnap LibOS, unless otherwise stated.
 # If you want to system-level tests on a different LibOS, then set the LIBOS flag accordingly.
-export LIBOS=catnap
+export LIBOS=catnip
 
 SHELL_DIR=$(dirname "$0")
 PROJ_DIR=$SHELL_DIR/..
 
 # Run tcp-push-pop.
-# $PROJ_DIR/bin/examples/rust/tcp-push-pop.elf --server $SERVER_IPV4_ADDR # Run this on server host.
-# $PROJ_DIR/bin/examples/rust/tcp-push-pop.elf --client $SERVER_IPV4_ADDR # Run this on client host.
+# $PROJ_DIR/bin/examples/rust/tcp-push-pop.elf --server $SERVER_IPV4_ADDR $SERVER_PORT # Run this on server host.
+# $PROJ_DIR/bin/examples/rust/tcp-push-pop.elf --client $SERVER_IPV4_ADDR $CLIENT_PORT # Run this on client host.
+# $PROJ_DIR/bin/examples/c/tcp-push-pop.elf --server $SERVER_IPV4_ADDR $SERVER_PORT # Run this on server host.
+
 
 # Run tcp-ping-pong.
 # $PROJ_DIR/bin/examples/rust/tcp-ping-pong.elf --server $SERVER_IPV4_ADDR # Run this on server host.
@@ -34,5 +36,5 @@ PROJ_DIR=$SHELL_DIR/..
 # $PROJ_DIR/bin/examples/rust/udp-ping-pong.elf --server $SERVER_IPV4_ADDR $CLIENT_IPV4_ADDR # Run this on server host.
 # $PROJ_DIR/bin/examples/rust/udp-ping-pong.elf --client $CLIENT_IPV4_ADDR $SERVER_IPV4_ADDR # Run this on client host.
 
-$PROJ_DIR/bin/examples/c/udp-ping-pong.elf --server $SERVER_IPV4_ADDR $SERVER_PORT $CLIENT_IPV4_ADDR $CLIENT_PORT  512 8 # Run this on server host.
-# $PROJ_DIR/bin/examples/c/udp-ping-pong.elf --client $CLIENT_IPV4_ADDR $CLIENT_PORT $SERVER_IPV4_ADDR $SERVER_PORT 128 1000000 16 # Run this on client host.
+$PROJ_DIR/bin/examples/c/udp-ping-pong.elf --server $SERVER_IPV4_ADDR $SERVER_PORT $CLIENT_IPV4_ADDR $CLIENT_PORT 512 1000000 4 # Run this on server host (data size = 512, max iterations = 1000000, num threads = 8).
+# $PROJ_DIR/bin/examples/c/udp-ping-pong.elf --client $CLIENT_IPV4_ADDR $CLIENT_PORT $SERVER_IPV4_ADDR $SERVER_PORT 128 1000000 16 # Run this on client host (data size = 128, max iterations = 1000000, num threads = 16).

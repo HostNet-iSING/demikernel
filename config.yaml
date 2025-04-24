@@ -2,8 +2,8 @@
 # Licensed under the MIT license.
 
 demikernel:
-  local_ipv4_addr: 10.0.2.102
-  local_link_addr: "10:70:fd:87:0e:ba"
+  local_ipv4_addr: 10.0.2.101
+  local_link_addr: "10:70:fd:6b:93:5c"
 raw_socket:
   linux_interface_name: "rdma0"
   xdp_interface_index: 0

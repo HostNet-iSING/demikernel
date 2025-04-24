@@ -33,9 +33,15 @@ static int accept_get_newsockqd(struct sockaddr_in *addr)
     int sockqd = -1;
     demi_qtoken_t tok = -1;
     demi_qresult_t res = {0};
+    int bind_result = -1;
 
     assert(demi_socket(&sockqd, AF_INET, SOCK_STREAM, 0) == 0);
-    assert(demi_bind(sockqd, (const struct sockaddr *)addr, sizeof(struct sockaddr_in)) == 0);
+    // assert(demi_bind(sockqd, (const struct sockaddr *)addr, sizeof(struct sockaddr_in)) == 0);
+    bind_result = demi_bind(sockqd, (const struct sockaddr *)addr, sizeof(struct sockaddr_in));
+    if (bind_result != 0) {
+        fprintf(stderr, "Error: demi_bind failed with error code %d\n", bind_result);
+        return -1;
+    }
     assert(demi_listen(sockqd, 16) == 0);
     assert(demi_accept(&tok, sockqd) == 0);
     assert(demi_wait(&res, tok, NULL) == 0);
@@ -128,10 +134,26 @@ void build_addr(const char *const ip_str, const char *const port_str, struct soc
 {
     int port = -1;
 
+    fprintf(stdout, "Debug - Received IP: %s, Port: %s\n", ip_str, port_str);
+    
     sscanf(port_str, "%d", &port);
+    fprintf(stdout, "Debug - Parsed port: %d\n", port);
+    
     addr->sin_family = AF_INET;
     addr->sin_port = htons(port);
-    assert(inet_pton(AF_INET, ip_str, &addr->sin_addr) == 1);
+    
+    fprintf(stdout, "Debug - Before inet_pton\n");
+    int pton_result = inet_pton(AF_INET, ip_str, &addr->sin_addr);
+    fprintf(stdout, "Debug - inet_pton result: %d\n", pton_result);
+    if (pton_result != 1) {
+        fprintf(stderr, "Error: inet_pton failed for IP: %s (result=%d)\n", ip_str, pton_result);
+        if (pton_result == 0) {
+            fprintf(stderr, "Invalid IP address format\n");
+        } else {
+            perror("inet_pton error");
+        }
+    }
+    assert(pton_result == 1);
 }
 
 // Exercises a one-way direction communication through TCP. This system-level test instantiates two demikernel peers: a
@@ -139,6 +161,11 @@ void build_addr(const char *const ip_str, const char *const port_str, struct soc
 // received TCP packets from the client.
 int main(int argc, char *const argv[])
 {
+    fprintf(stdout, "Debug - Number of arguments: %d\n", argc);
+    for (int i = 0; i < argc; i++) {
+        fprintf(stdout, "Debug - argv[%d]: %s\n", i, argv[i]);
+    }
+
     if (argc >= 4)
     {
         reg_sighandlers();
@@ -152,7 +179,9 @@ int main(int argc, char *const argv[])
         if (argc >= 6)
             sscanf(argv[5], "%u", &max_msgs);
 
+        fprintf(stdout, "Debug - Before build_addr call\n");
         build_addr(argv[2], argv[3], &addr);
+        fprintf(stdout, "Debug - After build_addr call\n");
 
         const struct demi_args args = {
             .argc = argc,

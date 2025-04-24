@@ -36,7 +36,7 @@
 /**
  * @brief Data size.
  */
-#define DATA_SIZE 512
+#define DATA_SIZE 64
 
 /**
  * @brief Maximum number of iterations.
@@ -135,8 +135,23 @@ static void server(thread_args_t *targs)
     init_demi_kernel(targs->args);
 
     /* Setup local socket. */
-    assert(demi_socket(&sockqd, AF_INET, SOCK_DGRAM, 0) == 0);
-    assert(demi_bind(sockqd, (const struct sockaddr *)targs->local, sizeof(struct sockaddr_in)) == 0);
+    printf("Creating socket...\n");
+    int socket_result = demi_socket(&sockqd, AF_INET, SOCK_DGRAM, 0);
+    if (socket_result != 0) {
+        printf("Failed to create socket, error code: %d\n", socket_result);
+        return;
+    }
+    printf("Socket created successfully, sockqd = %d\n", sockqd);
+
+    printf("Binding socket to %s:%d...\n", 
+           inet_ntoa(targs->local->sin_addr), 
+           ntohs(targs->local->sin_port));
+    int bind_result = demi_bind(sockqd, (const struct sockaddr *)targs->local, sizeof(struct sockaddr_in));
+    if (bind_result != 0) {
+        printf("Failed to bind socket, error code: %d\n", bind_result);
+        return;
+    }
+    printf("Socket bound successfully\n");
 
     /* Run. */
     for (unsigned it = 0; it < targs->max_iterations; it++)
@@ -308,7 +323,9 @@ int main(int argc, char *const argv[])
         unsigned max_iterations = MAX_ITERATIONS;
         unsigned num_threads = 1;
         int default_local_port = atoi(argv[3]);
+        printf("Default local port: %d\n", default_local_port);
         int default_remote_port = atoi(argv[5]);
+        printf("Default remote port: %d\n", default_remote_port);
         if (argc >= 7)
             sscanf(argv[6], "%zu", &data_size);
         if (argc >= 8)

@@ -428,6 +428,7 @@ mod test {
             libc::SOCK_DCCP,
             // libc::SOCK_DGRAM,
             // libc::SOCK_PACKET,
+            libc::AF_PACKET,
             libc::SOCK_RAW,
             libc::SOCK_RDM,
             libc::SOCK_SEQPACKET,
